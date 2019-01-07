@@ -16,9 +16,13 @@ class CreateItemsTable extends Migration
         Schema::create('items', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
-            $table->text('item_name');
-            $table->integer('list_id');
-            $table->integer('user_id');
+            $table->text('title');
+            $table->text('description')->nullable();
+            $table->integer('list');
+            $table->integer('user');
+            $table->date('due')->nullable();
+            $table->integer('progress')->default(0);
+            $table->boolean('done')->default(false);
         });
     }
 

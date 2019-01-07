@@ -1,19 +1,29 @@
-<?php
-
-namespace App\Http\Controllers;
+<?php namespace App\Http\Controllers;
 
 use App\Item;
 use Illuminate\Http\Request;
-use Illuminate\Routing\Controller as BaseController;
+// use App\Http\Controllers\Controller;
+// use Illuminate\Routing\Controller as BaseController;
 
-class ItemController extends BaseController
+class ItemController extends Controller
 {
     public function postItem(Request $request)
     {
+
+      // $request_valid = $request->validate([
+      //   'title' => 'required',
+      //   'user'  => 'required',
+      //   'list'  => 'required',
+      // ]);
+
       $item = new Item();
-      $item->item_name = $request->input('itemName');
-      $item->user_id = $request->input('itemUser');
-      $item->list_id   = $request->input('itemList');
+      $item->title        = $request->input('title');
+      $item->user         = $request->input('user');
+      $item->list         = $request->input('list');
+      $item->description  = $request->input('description');
+      $item->due          = $request->input('due');
+      $item->progress     = $request->input('progress');
+      $item->done         = $request->input('done');
       $item->save();
       return response()->json(['error'=>false,'result'=>'OK','operation'=>'item_added','item'=>$item], 201);
     }
@@ -33,8 +43,14 @@ class ItemController extends BaseController
       if(!$item){
         return response()->json(['error'=>true,'result'=>'no post found', 'operation'=>'edit_item'], 200);
       }
-      $item->item_name = $request->input('itemName');
-      $item->save();
+      $item->title        = $request->input('title');
+      $item->user         = $request->input('user');
+      $item->list         = $request->input('list');
+      $item->description  = $request->input('description');
+      $item->due          = $request->input('due');
+      $item->progress     = $request->input('progress');
+      $item->done         = $request->input('done');
+      $item->update();
       return response()->json(['error'=>false,'result'=>'OK','operation'=>'edit_item','item'=>$item], 200);
     }
 
