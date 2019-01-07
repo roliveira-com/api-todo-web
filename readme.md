@@ -1,2 +1,2 @@
 # api-todo-web
-A simple rest API written in php larval
+A simple rest API written in php Laravel
