@@ -2,19 +2,23 @@
 
 use App\Item;
 use Illuminate\Http\Request;
-// use App\Http\Controllers\Controller;
-// use Illuminate\Routing\Controller as BaseController;
 
 class ItemController extends Controller
 {
+
+    /**
+    * Cria uma nova tarefa na base
+    *
+    * @return mixed
+    */
     public function postItem(Request $request)
     {
 
-      // $request_valid = $request->validate([
-      //   'title' => 'required',
-      //   'user'  => 'required',
-      //   'list'  => 'required',
-      // ]);
+      $request_valid = $request->validate([
+        'title' => 'required',
+        'user'  => 'required',
+        'list'  => 'required',
+      ]);
 
       $item = new Item();
       $item->title        = $request->input('title');
@@ -28,6 +32,11 @@ class ItemController extends Controller
       return response()->json(['error'=>false,'result'=>'OK','operation'=>'item_added','item'=>$item], 201);
     }
 
+    /**
+    * Retorna uma lista de todas as tarefas cadastradas
+    *
+    * @return mixed
+    */
     public function getItem()
     {
       $item = Item::all();
@@ -37,6 +46,12 @@ class ItemController extends Controller
       return response()->json(['error'=>false,'result'=>$response,'operation'=>'get_items'], 200);
     }
 
+    /**
+    * Edita uma tarefa cadastrada
+    *
+    * @param id 
+    * @return mixed
+    */
     public function editItem(Request $request, $id)
     {
       $item = Item::find($id);
@@ -54,6 +69,12 @@ class ItemController extends Controller
       return response()->json(['error'=>false,'result'=>'OK','operation'=>'edit_item','item'=>$item], 200);
     }
 
+    /**
+    * Deleta uma tarefa criada
+    *
+    * @param id
+    * @return mixed
+    */
     public function deleteItem(Request $request, $id)
     {
       $item = Item::find($id);

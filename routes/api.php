@@ -28,3 +28,11 @@ Route::put('/item/{id}', [
 Route::delete('/item/{id}', [
     'uses' => 'ItemController@deleteItem'
 ]);
+
+Route::post('/user', [
+    'uses' => 'UserController@signup'
+]);
+
+Route::post('/signin', [
+    'uses' => 'UserController@signin'
+]);
