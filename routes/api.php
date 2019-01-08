@@ -14,7 +14,8 @@ use Illuminate\Http\Request;
 */
 
 Route::post('/item', [
-    'uses' => 'ItemController@postItem'
+    'uses' => 'ItemController@postItem',
+    'middleware' => 'auth.jwt'
 ]);
 
 Route::get('/item', [

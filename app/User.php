@@ -1,7 +1,6 @@
-<?php
+<?php namespace App;
 
-namespace App;
-
+use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -10,6 +9,11 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
+
+    public function posts()
+    {
+        return $this->hasMany('App\Post');
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -50,4 +54,6 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
+    use Illuminate\Database\Eloquent\Model;
 }
