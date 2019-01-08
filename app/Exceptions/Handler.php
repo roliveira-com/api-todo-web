@@ -7,6 +7,7 @@ use Exception;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Tymon\JWTAuth\Exceptions\TokenExpiredException;
 use Tymon\JWTAuth\Exceptions\TokenInvalidException;
+use Tymon\JWTAuth\Exceptions\TokenBlacklistedException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 
@@ -51,14 +52,23 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof TokenExpiredException) {
-            return Response::json(['error' => 'Token Expirado!'], 403);
-        } else if ($exception instanceof TokenInvalidException) {
-            return Response::json(['error' => 'Token Inválido!'], 403);
-        } else if ($exception instanceof JWTException) {
-            return Response::json(['error' => 'Erro ao obter Token!'], 403);
-        } else if ($exception instanceof UnauthorizedHttpException) {
-            return Response::json(['error' => 'Token não informado'], 403);
+
+        if ($exception instanceof UnauthorizedHttpException) {
+
+            $preException = $exception->getPrevious();
+        
+            if ($preException instanceof TokenExpiredException) {        
+                return response()->json(['error' => 'TOKEN_EXPIRED'], 403);        
+            } else if ($preException instanceof TokenInvalidException) {        
+                return response()->json(['error' => 'TOKEN_INVALID'], 403);        
+            } else if ($preException instanceof TokenBlacklistedException) {        
+                 return response()->json(['error' => 'TOKEN_BLACKLISTED'], 403);        
+           }
+        
+           if ($exception->getMessage() === 'Token not provided') {        
+               return response()->json(['error' => 'TOKEN_NOT_PROVIDED'], 403);        
+           }
+        
         }
         return parent::render($request, $exception);
     }

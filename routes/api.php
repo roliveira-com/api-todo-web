@@ -13,23 +13,6 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::post('/item', [
-    'uses' => 'ItemController@postItem',
-    'middleware' => 'auth.jwt'
-]);
-
-Route::get('/item', [
-    'uses' => 'ItemController@getItem'
-]);
-
-Route::put('/item/{id}', [
-    'uses' => 'ItemController@editItem'
-]);
-
-Route::delete('/item/{id}', [
-    'uses' => 'ItemController@deleteItem'
-]);
-
 Route::post('/user', [
     'uses' => 'UserController@signup'
 ]);
@@ -37,3 +20,21 @@ Route::post('/user', [
 Route::post('/signin', [
     'uses' => 'UserController@signin'
 ]);
+
+Route::group([ 'middleware' => 'auth.jwt'], function () {
+    Route::get('/item', [
+        'uses' => 'ItemController@getItem'
+    ]);
+
+    Route::post('/item', [
+        'uses' => 'ItemController@postItem',
+    ]);
+
+    Route::put('/item/{id}', [
+        'uses' => 'ItemController@editItem'
+    ]);
+    
+    Route::delete('/item/{id}', [
+        'uses' => 'ItemController@deleteItem'
+    ]);
+});

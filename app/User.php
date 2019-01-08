@@ -1,6 +1,5 @@
 <?php namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -55,5 +54,4 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    use Illuminate\Database\Eloquent\Model;
 }

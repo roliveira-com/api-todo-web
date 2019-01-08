@@ -1,6 +1,5 @@
 <?php namespace App\Http\Controllers;
 
-use JWTAuth;
 use App\Item;
 use Illuminate\Http\Request;
 
@@ -15,7 +14,7 @@ class ItemController extends Controller
     public function postItem(Request $request)
     {
 
-      $user = JWTAuth::parseToken()->toUser();
+      $user = auth()->user();
       
       $request_valid = $request->validate([
         'title' => 'required',
@@ -60,8 +59,16 @@ class ItemController extends Controller
       if(!$item){
         return response()->json(['error'=>true,'result'=>'no post found', 'operation'=>'edit_item'], 200);
       }
+      
+      $request->validate([
+        'title'     => 'required',
+        'list'      => 'required',
+        'progress'  => 'required',
+        'done'      => 'required'
+      ]);
+
       $item->title        = $request->input('title');
-      $item->user         = $request->input('user');
+      $item->user         = auth()->user()->id;
       $item->list         = $request->input('list');
       $item->description  = $request->input('description');
       $item->due          = $request->input('due');
