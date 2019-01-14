@@ -56,8 +56,12 @@ class ItemController extends Controller
     public function editItem(Request $request, $id)
     {
       $item = Item::find($id);
+      $user = auth()->user();
+
       if(!$item){
         return response()->json(['error'=>true,'result'=>'no post found', 'operation'=>'edit_item'], 200);
+      }else if($item->user !== $user->id){
+        return response()->json(['error'=>true,'result'=>'not authorized', 'operation'=>'edit_item'], 403);
       }
       
       $request->validate([
@@ -68,7 +72,7 @@ class ItemController extends Controller
       ]);
 
       $item->title        = $request->input('title');
-      $item->user         = auth()->user()->id;
+      $item->user         = $user->id;
       $item->list         = $request->input('list');
       $item->description  = $request->input('description');
       $item->due          = $request->input('due');
@@ -87,9 +91,14 @@ class ItemController extends Controller
     public function deleteItem(Request $request, $id)
     {
       $item = Item::find($id);
+      $user = auth()->user();
+
       if(!$item){
         return response()->json(['error'=>true,'result'=>'no item found to delete', 'operation'=>'delete_item'], 200);
+      }else if($item->user !== $user->id){
+        return response()->json(['error'=>true,'result'=>'not authorized', 'operation'=>'edit_item'], 403);
       }
+      
       $item->delete();
       return response()->json(['error'=>false,'result'=>'OK','operation'=>'delete_item','item'=>$item], 200);
     }
