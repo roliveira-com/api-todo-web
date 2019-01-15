@@ -40,11 +40,12 @@ class ItemController extends Controller
     */
     public function getItem()
     {
-      $item = Item::all();
+      $user = auth()->user();
+      $item = Item::where('user', $user->id)->get();
       $response = [
         'items' => $item
       ];
-      return response()->json(['error'=>false,'result'=>$response,'operation'=>'get_items'], 200);
+      return response()->json(['error'=>false,'result'=>$response,'operation'=>'get_items', 'user_id'=>$user->id], 200);
     }
 
     /**
